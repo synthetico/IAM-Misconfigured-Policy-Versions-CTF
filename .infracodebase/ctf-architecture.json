@@ -1,0 +1,130 @@
+{
+  "name": "CTF Challenge Architecture",
+  "nodes": [
+    {
+      "id": "internet",
+      "label": "Internet",
+      "x": 0,
+      "y": 0,
+      "icon": "/icons/aws/general/internet-alt1.png",
+      "type": "resource"
+    },
+    {
+      "id": "sg",
+      "label": "Security Group\nctf-web-sg",
+      "x": 0,
+      "y": 300,
+      "subtitle": "HTTP (80) & SSH (22)",
+      "icon": "/icons/aws/security/security-hub.png",
+      "type": "resource"
+    },
+    {
+      "id": "ec2",
+      "label": "EC2 Instance\nVulnerable-Bastion-CTF",
+      "x": 0,
+      "y": 600,
+      "subtitle": "t2.micro | IMDSv1 Enabled",
+      "icon": "/icons/aws/compute/ec2.png",
+      "type": "resource"
+    },
+    {
+      "id": "iam_role",
+      "label": "IAM Role\nEC2-Web-Role",
+      "x": 440,
+      "y": 300,
+      "subtitle": "DynamoDB Read Policy",
+      "icon": "/icons/aws/security/identity-and-access-management-iam-role.png",
+      "type": "resource"
+    },
+    {
+      "id": "iam_profile",
+      "label": "Instance Profile\nEC2-Web-Profile",
+      "x": 440,
+      "y": 600,
+      "icon": "/icons/aws/security/identity-and-access-management-iam-role.png",
+      "type": "resource"
+    },
+    {
+      "id": "dynamodb",
+      "label": "DynamoDB Table\nGameData",
+      "x": 220,
+      "y": 900,
+      "subtitle": "Contains Flag",
+      "icon": "/icons/aws/database/dynamodb.png",
+      "type": "resource"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "internet",
+      "target": "sg",
+      "label": "HTTP/SSH",
+      "color": "blue",
+      "sourceHandle": "bottom",
+      "targetHandle": "top"
+    },
+    {
+      "id": "e2",
+      "source": "sg",
+      "target": "ec2",
+      "label": "Allow",
+      "color": "green",
+      "sourceHandle": "bottom",
+      "targetHandle": "top"
+    },
+    {
+      "id": "e3",
+      "source": "iam_profile",
+      "target": "ec2",
+      "label": "Attached",
+      "color": "purple",
+      "style": "dashed",
+      "sourceHandle": "left",
+      "targetHandle": "right"
+    },
+    {
+      "id": "e4",
+      "source": "iam_role",
+      "target": "iam_profile",
+      "label": "Uses",
+      "color": "purple",
+      "style": "dashed",
+      "sourceHandle": "bottom",
+      "targetHandle": "top"
+    },
+    {
+      "id": "e5",
+      "source": "ec2",
+      "target": "dynamodb",
+      "label": "Read Access",
+      "color": "yellow",
+      "sourceHandle": "bottom",
+      "targetHandle": "top"
+    }
+  ],
+  "legend": {
+    "edges": [
+      {
+        "label": "Network Traffic",
+        "color": "blue",
+        "style": "solid"
+      },
+      {
+        "label": "Security Policy",
+        "color": "green",
+        "style": "solid"
+      },
+      {
+        "label": "IAM Relationship",
+        "color": "purple",
+        "style": "dashed"
+      },
+      {
+        "label": "Data Access",
+        "color": "yellow",
+        "style": "solid"
+      }
+    ]
+  }
+}
